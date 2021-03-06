@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "BuyTickets";
+}
+<link href="~/CSS/buyTickets.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/buyTicketsScript.js"></script>
+<h2>Select seat(s) for @ViewBag.name:</h2>
+
+<div>
+
+
+    @for (int i = 0; i < 5; i++)
+    {
+
+        for (int j = 0; j < 10; j++)
+        {
+            foreach (Project.Models.MovieList movieList in Model.movies)
+            {
+
+                if (movieList.movieName.Equals(ViewBag.name))
+                {
+                    bool flag = true;
+                    bool flag2 = false;
+                    string[] chosenSeats = ViewBag.seats.Split(',');
+                    string[] seats = movieList.takenSeats.Split(',');
+                    foreach (string seat in seats)
+                    {
+                        if (seat.Equals((i * 10 + j).ToString()))
+                        {
+                            <div id="@((i * 10 + j).ToString())" class="takenSeat"></div>
+                            flag = false;
+                            flag2 = true;
+                        }
+
+                    }
+                    if (flag2)
+                    {
+                        continue;
+                    }
+
+                    foreach (string seat in chosenSeats)
+                    {
+
+                        if (seat.Equals((i * 10 + j).ToString()))
+                        {
+                            int index = ViewBag.seats.IndexOf((i * 10 + j).ToString());
+                            <a href="@(Url.Action("BuyTickets", "Home", new { movieList.movieName,seats=(ViewBag.seats.Remove(index,2)) }))" id="@((i * 10 + j).ToString())" class="chosenSeat"> <div></div></a>
+                            flag = false;
+
+                            ViewBag.count++;
+                            flag2 = true;
+
+                        }
+
+                    }
+                    if (flag2)
+                    {
+                        continue;
+                    }
+                    if (flag)
+                    {
+
+                        <a href="@(Url.Action("BuyTickets", "Home", new { movieList.movieName,seats=(ViewBag.seats+((i * 10 + j).ToString())+",,") }))" id="@((i * 10 + j).ToString())" class="freeSeat"> <div></div></a>
+
+                        flag = false;
+                    }
+
+                }
+            }
+
+        }
+        <br />
+    }
+
+    @if (ViewBag.count > 0)
+    {
+        <a href="@(Url.Action("Payment", "Home", new {movieName=ViewBag.name,chosenSeats=ViewBag.seats,count=ViewBag.count }))"><button>Proceed to payment for @ViewBag.count seats</button></a>
+    }
+
+</div>

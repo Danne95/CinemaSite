@@ -1,0 +1,167 @@
+﻿@if (ViewBag.bul.Equals(""))
+{
+    <body>
+        <td><button type="submit"> <a href="@(Url.Action("ManageMovies", "Home", new { bull = "add" }))">Add a movie</a></button></td>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form class="container">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Date and time</th>
+                                    <th>Hall</th>
+                                    <th>Category</th>
+                                    <th>Age limit</th>
+                                    <th>Rating</th>
+                                    <th>Remove</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Project.Models.MovieList movieList in Model.movies)
+                                {
+                                    string[] da = movieList.streamDate.Split('/');
+                                    string[] ta = movieList.streamTime.Split(':');
+                                    DateTime date1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                                    DateTime date2 = new DateTime(int.Parse(da[2]), int.Parse(da[1]), int.Parse(da[0]), int.Parse(ta[1]), int.Parse(ta[0]), 0);
+                                    if (DateTime.Compare(date1, date2) < 0)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                <img src="@movieList.imageLink" width="300" height="400" />
+                                                <br />
+                                                Movie name: <input type="text" name="movieName" value="@movieList.movieName" readonly="readonly" style="background-color: #D0D3D4;" />
+                                            </td>
+                                            <td>
+                                                price: <input type="text" name="moviePrice" value="@movieList.price" readonly="readonly" style="background-color: #D0D3D4;"/>
+
+                                                <br />
+                                                sale: <input type="text" name="sale" value="@movieList.sale" readonly="readonly" style="background-color: #D0D3D4;"/>
+
+                                            </td>
+                                            <td>
+                                                Movie date: <input type="text" name="streamDate" value="@movieList.streamDate" readonly="readonly" style="background-color: #D0D3D4;" />
+                                                Movie time: <input type="text" name="streamTime" value="@movieList.streamTime" readonly="readonly"  style="background-color: #D0D3D4;"/>
+                                            </td>
+                                            <td>
+                                                hall: <input type="text" name="hall" value="@movieList.hall" readonly="readonly" style="background-color: #D0D3D4;"/>
+                                                <input type="text" name="bull" readonly="readonly" value="edit" style="background-color: #D0D3D4;" />
+
+                                            </td>
+                                            <td>@movieList.category</td>
+                                            <td>@movieList.ageLim</td>
+                                            <td>@movieList.rating</td>
+                                            <td><button type="submit"> <a href="@(Url.Action("ManageMovies", "Home", new { movieName=movieList.movieName, streamTime =movieList.streamTime, streamDate =movieList.streamDate,hall=movieList.hall ,bull = "delete" }))">Delete movie</a></button></td>
+                                            <td><button type="submit"> <a href="@(Url.Action("ManageMovies", "Home", new { movieName=movieList.movieName, streamTime =movieList.streamTime, streamDate =movieList.streamDate,hall=movieList.hall ,bull = "edit" }))">Edit</a></button></td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </body>
+}
+else if (ViewBag.bul.Equals("edit"))
+{
+    
+
+<form class="container">
+    @foreach (Project.Models.MovieList movieList in Model.movies)
+    {
+
+        if (movieList.movieName.Equals(ViewBag.name) && movieList.hall.Equals(ViewBag.hall) && movieList.streamDate.Equals(ViewBag.date) && movieList.streamTime.Equals(ViewBag.time))
+        {
+            
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Date and time</th>
+                <th>Hall</th>
+                <th>Category</th>
+                <th>Age limit</th>
+                <th>Rating</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <td>
+                    <img src="@movieList.imageLink" width="300" height="400"  />
+                    <br /> 
+                    Movie name: <input type="text" name="movieName" value="@movieList.movieName" readonly="readonly" style="background-color: #D0D3D4;"/>
+                </td>
+                <td>
+                    price: <input type="text" name="moviePrice" value="@movieList.price" />
+
+                    <br />
+                    sale: <input type="text" name="sale" value="@movieList.sale" />
+
+                </td>
+                <td>
+                    Movie date: <input type="text" name="streamDate" value="@movieList.streamDate" readonly="readonly" style="background-color: #D0D3D4;" />
+                    Movie time: <input type="text" name="streamTime" value="@movieList.streamTime" readonly="readonly" style="background-color: #D0D3D4;" />
+                </td>
+                <td>
+                    Old hall: <input type="text" name="olhall" style="background-color: #D0D3D4;" value="@movieList.hall" readonly="readonly" style="background-color: #D0D3D4;" />
+                    New hall: <input type="text" name="hall" value="@movieList.hall" />
+
+                    <input type="text" name="bull" readonly="readonly" value="edit" style="background-color: #D0D3D4;"/>
+
+                </td>
+                <td>@movieList.category</td>
+                <td>@movieList.ageLim</td>
+                <td>@movieList.rating</td>
+                <td><button>Confirm changes</button></td>
+            </tr>
+        </tbody>
+    </table>
+        }
+    }
+
+</form>
+
+
+}
+else if (ViewBag.bul.Equals("delete"))
+{
+    <b>Are you sure you would like to delete the movie @ViewBag.t.movieName that shows in @ViewBag.t.streamTime @ViewBag.t.streamDate at hall @ViewBag.t.hall ? </b>
+    <button type="submit"> <a href="@(Url.Action("ManageMovies", "Home", new { movieName=ViewBag.t.movieName,streamTime = ViewBag.t.streamTime, streamDate =ViewBag.t.streamDate,hall=ViewBag.t.hall ,bull = "deletee" }))">Accept</a></button>
+
+    <button type="submit"> <a href="@(Url.Action("ManageMovies", "Home", new {  }))">Decline</a></button>
+
+}
+else if (ViewBag.bul.Equals("add"))
+{
+    @ViewBag.msg
+    <br />
+    <form>
+        name  <input type="text" placeholder="Enter New Movie name" name="movieName" /> <br />
+        Date: <input type="date" name="streamDate" /> <br />
+        Time: <input type="time" name="streamTime" /> <br />
+        Image link: <input type="text" placeholder="Enter New Movie Link" name="link" /> <br />
+        Hall: <input type="text" placeholder="Enter New Movie Hall" name="hall" /> <br />
+        price: <input type="text" placeholder="Enter New Movie price" name="moviePrice" /> <br />
+        sale: <input type="text" placeholder="Enter Movie sale (optional)" name="sale" /> <br />
+        Age limit: <input type="text" name="age" placeholder="Enter New Movie age limit (optional)" /> <br />
+        Category: <input type="text" name="cat" placeholder="Enter New Movie catagory" /> <br />
+        <input type="text" name="bull" value="add" readonly="readonly" /> <br />
+
+        <button> Confirm </button>
+    </form>
+}

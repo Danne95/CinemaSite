@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+<h1>Admin login</h1>
+
+<form class="container">
+
+
+
+    @if (!ViewBag.authorized)
+    {
+        Username:<input type="text" placeholder="Enter Username" name="username" @Html.ViewBag.username="username">
+
+
+        Password: <input type="password" placeholder="Enter Password" name="password" @ViewBag.password="password">
+
+        <button >Manage Movies</button>
+
+        @ViewBag.massege
+    }
+    else
+    {
+
+    }
+
+</form>

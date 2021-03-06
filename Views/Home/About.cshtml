@@ -1,0 +1,117 @@
+﻿<h1>Movies: </h1>
+<link href="~/CSS/aboutStyle.css" rel="stylesheet" />
+<body>
+    <div>
+        <label for="sortBy">Sort by: </label>
+
+        <select name="options" onchange="location = this.value;">
+            <option>Select</option>
+            <option value="@(Url.Action("About", "Home", new { sortBy="priceInc",date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price }))">Price Increase</option>
+            <option value="@(Url.Action("About", "Home", new { sortBy="priceDec" ,date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price}))">Price Decrease</option>
+            <option value="@(Url.Action("About", "Home", new { sortBy="rating",date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price }))">Rating</option>
+            <option value="@(Url.Action("About", "Home", new { sortBy="category",date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price }))">Catagory</option>
+        </select>
+        <label for="sortBy">Choose date: </label>
+
+        <select name="options" onchange="location = this.value;">
+            <option>Select</option>
+            @foreach (Project.Models.MovieList movieList in Model.movies)
+            {
+                <option value="@(Url.Action("About", "Home", new { sortBy=ViewBag.sort,date=movieList.streamDate,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price }))">@movieList.streamDate</option>
+            }
+        </select>
+        <label for="sortBy">Choose catagory: </label>
+
+        <select name="options" onchange="location = this.value;">
+            <option>Select</option>
+            @foreach (Project.Models.MovieList movieList in Model.movies)
+            {
+                <option value="@(Url.Action("About", "Home", new { sortBy=ViewBag.sort,date=ViewBag.date,catagory=movieList.category,time=ViewBag.time, price=ViewBag.price }))">@movieList.category</option>
+            }
+        </select>
+        <label for="sortBy">Choose Time: </label>
+
+        <select name="options" onchange="location = this.value;">
+            <option>Select</option>
+            @foreach (Project.Models.MovieList movieList in Model.movies)
+            {
+                <option value="@(Url.Action("About", "Home", new { sortBy=ViewBag.sort,date=ViewBag.date,catagory=ViewBag.catagory,time=movieList.streamTime, price=ViewBag.price }))">@movieList.streamTime</option>
+            }
+        </select>
+        <label for="sortBy">Choose Price: </label>
+
+        <select name="options" onchange="location = this.value;">
+            <option>Select</option>
+            @foreach (Project.Models.MovieList movieList in Model.movies)
+            {
+                <option value="@(Url.Action("About", "Home", new { sortBy=ViewBag.sort,date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=movieList.price }))">@movieList.price</option>
+            }
+        </select>
+        <a href="@(Url.Action("About", "Home", new { sortBy=ViewBag.sort,date=ViewBag.date,catagory=ViewBag.catagory,time=ViewBag.time, price=ViewBag.price,sale = true }))"><button>  Show sales</button></a>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Date and time</th>
+                            <th>Hall</th>
+                            <th>Category</th>
+                            <th>Age limit</th>
+                            <th>Rating</th>
+                            <th>Buy Ticket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Project.Models.MovieList movieList in Model.movies)
+                        {
+                            string[] da = movieList.streamDate.Split('/');
+                            string[] ta = movieList.streamTime.Split(':');
+                            DateTime date1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                            DateTime date2 = new DateTime(int.Parse(da[2]), int.Parse(da[1]), int.Parse(da[0]), int.Parse(ta[1]), int.Parse(ta[0]), 0);
+                            if (DateTime.Compare(date1, date2) < 0)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="@movieList.imageLink" width="300" height="400" />
+                                        <br />
+                                        @movieList.movieName
+                                    </td>
+                                    <td>
+                                        @if (movieList.sale > 0)
+                                        {
+                                             <s>@movieList.price</s> <b>@(movieList.price-movieList.price*movieList.sale)</b> 
+                                        }
+                                        else
+                                        {
+
+                                            @movieList.price 
+                                        }
+                                    </td>
+                                     <td>
+                                        @movieList.streamDate
+                                        @movieList.streamTime
+                                     </td>
+                                     <td>@movieList.hall</td>
+                                     <td>@movieList.category</td>
+                                     <td>@movieList.ageLim</td>
+                                     <td>@movieList.rating</td>
+                                     <td><button> <a href="@(Url.Action("BuyTickets", "Home", new { movieName=movieList.movieName }))">Buy</a></button></td>
+                                </tr>
+                            }
+                        }
+
+</tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</body>

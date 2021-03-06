@@ -1,0 +1,29 @@
+﻿
+.takenSeat {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+    background-color: red;
+    display: inline-block;
+}
+
+.freeSeat {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+    display: inline-block;
+    background-color: yellow;
+}
+.chosenSeat {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+    display: inline-block;
+    background-color: green;
+}

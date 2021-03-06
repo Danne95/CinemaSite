@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Payment";
+}
+<h1>Shopping cart</h1>
+<body>
+    <div>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Date and time</th>
+                            <th>Hall</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Project.Models.MovieList movieList in Model.movies)
+                        {
+                            if (ViewBag.movie.Equals(movieList.movieName))
+                            {
+                            <tr>
+                                <td>@movieList.movieName</td>
+                                <td>
+                                    @if (movieList.sale > 0)
+                                    {
+                                        <s>@movieList.price</s> <b>@(movieList.price-movieList.price*movieList.sale)</b>
+                                    }
+                                    else
+                                    {
+
+                                        @movieList.price
+                                    }
+                                                            </td>
+                                <td>
+                                    @movieList.streamDate
+                                    @movieList.streamTime
+                                </td>
+                                <td>@movieList.hall</td>
+                                <td>Total tickets: @ViewBag.count
+                                    Total price: @(ViewBag.count*(movieList.price-movieList.price*movieList.sale))</td>
+                            </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <a href="@(Url.Action("ThankYou", "Home", new {  }))" ><button>Click Here to pay at the cinema</button></a>
+    <a href="@(Url.Action("ThankYou", "Home", new {  }))" ><button >Click Here to pay using a credit card</button></a>
+
+    <a href="@(Url.Action("CancelPayment", "Home", new { movieName=ViewBag.movie,chosenSeats=ViewBag.seat }))"><button>Cancel</button></a>
+
+
+</body>
